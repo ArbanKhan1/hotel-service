@@ -2,6 +2,7 @@ package com.hotel_service.service;
 
 import com.hotel_service.dto.HotelCreateRequest;
 import com.hotel_service.dto.HotelResponse;
+import com.hotel_service.exceptions.NoHotelFound;
 import com.hotel_service.model.Hotel;
 import com.hotel_service.repository.HotelRepository;
 import lombok.RequiredArgsConstructor;
@@ -22,5 +23,12 @@ public class HotelService {
 
         return response;
 
+    }
+
+    public HotelResponse getHotelById(Long id) {
+        Hotel hotel = hotelRepository.findByIdAndIsActiveTrue(id).orElseThrow(() -> new NoHotelFound("No Hotel Found"));
+        HotelResponse response = new HotelResponse();
+        BeanUtils.copyProperties(hotel,response);
+        return response;
     }
 }
